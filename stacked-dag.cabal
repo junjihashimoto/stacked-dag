@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 57c444b244471ba568f185b245e319dac1300ef668335859a1516b8b2a0bbe7d
+-- hash: 2188812bea0c0424ece99cd546a16fcd01cedc61c8eacdac83b90c3447583c5d
 
 name:           stacked-dag
-version:        0.1.0.0
+version:        0.1.0.1
 synopsis:       Ascii DAG(Directed acyclic graph) for visualization of dataflow
 description:    Please see the README on GitHub at <https://github.com/junji.hashimoto/stacked-dag#readme>
 category:       Graphs, Graphics
