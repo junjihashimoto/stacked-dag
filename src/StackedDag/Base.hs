@@ -1,15 +1,11 @@
-module StackedDag.Base (
-  Labels
-, Edges
-, NodeId
-, mkLabels
-, mkEdges
-, edgesToText
-) where
+module StackedDag.Base where
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.List as L
+import Control.Monad
+import Control.Monad.ST
+import Data.STRef
 import Data.Maybe(maybe)
 
 type NodeId = Int
@@ -99,8 +95,8 @@ samplelabels = mkLabels [
 getDepthGroup :: Edges -> DepthGroup
 getDepthGroup edges = M.fromList d2n
   where
-    depth0 = getDepth edges
-    depth1 = getDepth $ reverseEdges edges
+    depth0 = getDepth2 edges
+    depth1 = getDepth2 $ reverseEdges edges
     score nodeid =
       maybe 0 id (M.lookup nodeid depth0) +
       maybe 0 id (M.lookup nodeid depth1)
@@ -166,6 +162,35 @@ getNodes edges = S.fromList $ parents ++ children
       child <- S.toList c
       return child
 
+
+getDepth2 :: Edges -> DepthNode
+getDepth2 edges = runST $ do
+  ref <- newSTRef M.empty
+  mm <- forM (S.toList $ getNodes edges) $ \v -> do
+     d <- getDepth2' ref v edges
+     return (v,d)
+  return $ M.fromList mm
+
+getDepth2' :: STRef s DepthNode -> Int -> Edges -> ST s Int
+getDepth2' ref i edges = do
+  d <- readSTRef ref
+  case M.lookup i d of
+    Just v -> return v
+    Nothing -> do
+      case M.lookup i edges of
+        Just v -> do
+          dl <- forM (S.toList v) $ \v' -> do
+                  getDepth2' ref v' edges
+          let m = 1 + (maximum dl)
+          d' <- readSTRef ref
+          writeSTRef ref $ M.insert i m d'
+          return m
+        Nothing -> do
+          writeSTRef ref $ M.insert i 0 d
+          return 0
+
+
+{-
 getDepth :: Edges -> DepthNode
 getDepth edges = M.fromList $ map (\v -> (v,getDepth' v edges)) $ S.toList $ getNodes edges
 
@@ -174,7 +199,7 @@ getDepth' i edges =
   case M.lookup i edges of
     Just v -> 1 + (maximum $ map (\v' -> getDepth' v' edges ) $ S.toList v)
     Nothing -> 0
-
+-}
 
 -- | Move nodes to next step
 --
@@ -247,7 +272,7 @@ moveAll' nodes buf | all (\(_,c,g) -> c==g) nodes && buf /= [] = buf
 
 mergeSymbol :: [(Symbol,Pos)] -> [(Symbol,Pos)]
 mergeSymbol symbols =
-  map (\v -> (foldr mappend mempty (map fst v),(snd (head v))))
+  map (\v -> (foldl mappend mempty (map fst v),(snd (head v))))
   $ L.groupBy (\(s0,p0) (s1,p1) -> p0 == p1)
   $ L.sortBy (\(s0,p0) (s1,p1) -> p0 `compare` p1) symbols
 
@@ -308,7 +333,7 @@ addBypassNode'' :: Depth -> Edges -> DepthGroup' -> DepthGroup'
 addBypassNode'' d edges dg | d < 2 = error $ "depth " ++ show d  ++ " must be greater than 2"
                            | otherwise =
   case (M.lookup d dg,M.lookup (d-1) dg) of
-    (Just (nids0,skipnids0),Just (nids1,_)) -> foldl (\dg' nid -> update d nids1 dg' nid) dg (nids0++skipnids0)
+    (Just (nids0,skipnids0),Just n1@(nids1,v)) -> M.update (\_ -> Just (foldl (\n1' nid -> update nids1 n1' nid) n1 (nids0++skipnids0))) (d-1) dg
     (Just (nids0,skipnids0),Nothing)        -> dg
     (Nothing,_)                             -> dg
   where
@@ -322,11 +347,11 @@ addBypassNode'' d edges dg | d < 2 = error $ "depth " ++ show d  ++ " must be gr
       case M.lookup nid edges' of
         Just m -> all id $ map (\n -> L.elem n nids) $ (S.toList m)
         Nothing -> True
-    update :: Depth -> [NodeId] -> DepthGroup' -> NodeId -> DepthGroup'
-    update d' nids1 dg' nid0 =
+    update :: [NodeId] -> ([NodeId],[NodeId]) -> NodeId -> ([NodeId],[NodeId])
+    update nids1 (v,skip) nid0 =
       if not (elem nid0 nids1)
-      then M.update (\(v,skip) -> Just (v,skip++[nid0])) (d'-1) dg'
-      else dg'
+      then (v,skip++[nid0])
+      else (v,skip)
 
 
 -- | Get a maximum of depth
@@ -461,93 +486,3 @@ addPos edges (curn,curs) (nxtn,nxts) = (n2n++n2s,s2n++s2s)
                   Just (_,ii) -> [(c,i,ii)]
                   Nothing -> []
               Nothing -> []
-
-
-
-{-
-
-o o   0,1
-|/
-o o o 2,4,6
-|/_/
-o
-|
-o
-
-o o o   0,1,8
-|/   \
-o o o o 2,4,6,7
-|/_/_/
-o       3
-|
-o       5
-
-o o o o
-|____/
-
-o o o
-| '''\
-
-o o o o
-|/_/_/
-o        add
-|\
-| |\
-| | |\
-o o o o
-
-o o
- x
-a b
-
-o o o
-| |/
-|/|
-o o
-
--}
-main = do
-  putStr $ edgesToText samplelabels sampledat
-  putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
-                           (0,"l0"),
-                           (1,"l1"),
-                           (2,"l2"),
-                           (3,"l3")
-                    ]) ( mkEdges [
-                           (0,[3]),
-                           (1,[2])
-                           ])
-  putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
-                           (0,"l0"),
-                           (1,"l1"),
-                           (2,"l2"),
-                           (3,"l3")
-                    ]) ( mkEdges [
-                           (0,[1,2,3])
-                           ])
-  putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
-                           (0,"l0"),
-                           (1,"l1"),
-                           (2,"l2"),
-                           (3,"l3"),
-                           (4,"l4")
-                    ]) ( mkEdges [
-                           (0,[4]),
-                           (1,[4]),
-                           (2,[4]),
-                           (3,[4])
-                           ])
-  putStrLn "---"
-  putStr $ edgesToText ( mkLabels []) ( mkEdges [
-                                          (0,[1,2]),
-                                          (1,[2])
-                                          ])
-  putStrLn "---"
-  putStr $ edgesToText ( mkLabels []) ( mkEdges [
-                                          (0,[1,3]),
-                                          (1,[2]),
-                                          (2,[3])
-                                          ])

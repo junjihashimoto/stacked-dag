@@ -1,6 +1,12 @@
 module StackedDag (
-  module StackedDag.Base
-, module StackedDag.Graphviz
+  Labels
+, Edges
+, NodeId
+, mkLabels
+, mkEdges
+, edgesToText
+, genEdgesFromDot
+, genAsciiFromDot
 ) where
 
 import StackedDag.Base

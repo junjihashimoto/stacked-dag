@@ -7,8 +7,8 @@ import qualified Data.GraphViz as G
 import qualified Data.GraphViz.Attributes.Complete as GT
 import StackedDag.Base
 
-genAsciiFromDot :: T.Text -> T.Text
-genAsciiFromDot dot = S.fromString $ edgesToText labels edges
+genEdgesFromDot :: T.Text -> (Labels,Edges)
+genEdgesFromDot dot = (labels,edges)
   where
    dg :: G.DotGraph String
    dg = G.parseDotGraph dot
@@ -23,3 +23,5 @@ genAsciiFromDot dot = S.fromString $ edgesToText labels edges
    labels = mkLabels $ map (\v -> (read (G.nodeID v),getl (G.nodeAttributes v))) $ G.graphNodes dg
 
 
+genAsciiFromDot :: T.Text -> T.Text
+genAsciiFromDot dot = S.fromString $ uncurry edgesToText $ genEdgesFromDot dot

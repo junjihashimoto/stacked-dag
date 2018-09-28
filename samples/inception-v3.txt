@@ -1,0 +1,565 @@
+o o    data,conv_conv2d_weight
+|/
+o o o    conv_conv2d,conv_batchnorm_gamma,conv_batchnorm_beta
+|/_/
+o    conv_batchnorm
+|
+o o    conv_relu,conv_1_conv2d_weight
+|/
+o o o    conv_1_conv2d,conv_1_batchnorm_gamma,conv_1_batchnorm_beta
+|/_/
+o    conv_1_batchnorm
+|
+o o    conv_1_relu,conv_2_conv2d_weight
+|/
+o o o    conv_2_conv2d,conv_2_batchnorm_gamma,conv_2_batchnorm_beta
+|/_/
+o    conv_2_batchnorm
+|
+o    conv_2_relu
+|
+o o    pool,conv_3_conv2d_weight
+|/
+o o o    conv_3_conv2d,conv_3_batchnorm_gamma,conv_3_batchnorm_beta
+|/_/
+o    conv_3_batchnorm
+|
+o o    conv_3_relu,conv_4_conv2d_weight
+|/
+o o o    conv_4_conv2d,conv_4_batchnorm_gamma,conv_4_batchnorm_beta
+|/_/
+o    conv_4_batchnorm
+|
+o    conv_4_relu
+|
+o o    pool1,mixed_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_tower_1_conv_conv2d,mixed_tower_1_conv_batchnorm_gamma,mixed_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_tower_1_conv_batchnorm
+|  \
+|    \
+o o o |    mixed_tower_1_conv_relu,mixed_tower_conv_conv2d_weight,mixed_tower_1_conv_1_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_tower_1_conv_1_conv2d,mixed_tower_conv_conv2d,mixed_tower_conv_batchnorm_gamma,mixed_tower_conv_batchnorm_beta,mixed_tower_1_conv_1_batchnorm_gamma,mixed_tower_1_conv_1_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_tower_1_conv_1_batchnorm,mixed_tower_conv_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_tower_1_conv_1_relu,mixed_tower_conv_relu,avg_pool_mixed_pool,mixed_conv_conv2d_weight,mixed_tower_conv_1_conv2d_weight,mixed_tower_1_conv_2_conv2d_weight,mixed_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_tower_1_conv_2_conv2d,mixed_tower_conv_1_conv2d,mixed_tower_2_conv_conv2d,mixed_conv_conv2d,mixed_conv_batchnorm_gamma,mixed_conv_batchnorm_beta,mixed_tower_conv_1_batchnorm_gamma,mixed_tower_conv_1_batchnorm_beta,mixed_tower_1_conv_2_batchnorm_gamma,mixed_tower_1_conv_2_batchnorm_beta,mixed_tower_2_conv_batchnorm_gamma,mixed_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_tower_1_conv_2_batchnorm,mixed_tower_conv_1_batchnorm,mixed_tower_2_conv_batchnorm,mixed_conv_batchnorm
+| | | |
+o o o o    mixed_tower_1_conv_2_relu,mixed_tower_conv_1_relu,mixed_tower_2_conv_relu,mixed_conv_relu
+|/_/_/
+o o    ch_concat_mixed_chconcat,mixed_1_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_1_tower_1_conv_conv2d,mixed_1_tower_1_conv_batchnorm_gamma,mixed_1_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_1_tower_1_conv_batchnorm
+|  \
+|    \
+o o o |    mixed_1_tower_1_conv_relu,mixed_1_tower_conv_conv2d_weight,mixed_1_tower_1_conv_1_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_1_tower_1_conv_1_conv2d,mixed_1_tower_conv_conv2d,mixed_1_tower_conv_batchnorm_gamma,mixed_1_tower_conv_batchnorm_beta,mixed_1_tower_1_conv_1_batchnorm_gamma,mixed_1_tower_1_conv_1_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_1_tower_1_conv_1_batchnorm,mixed_1_tower_conv_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_1_tower_1_conv_1_relu,mixed_1_tower_conv_relu,avg_pool_mixed_1_pool,mixed_1_conv_conv2d_weight,mixed_1_tower_conv_1_conv2d_weight,mixed_1_tower_1_conv_2_conv2d_weight,mixed_1_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_1_tower_1_conv_2_conv2d,mixed_1_tower_conv_1_conv2d,mixed_1_tower_2_conv_conv2d,mixed_1_conv_conv2d,mixed_1_conv_batchnorm_gamma,mixed_1_conv_batchnorm_beta,mixed_1_tower_conv_1_batchnorm_gamma,mixed_1_tower_conv_1_batchnorm_beta,mixed_1_tower_1_conv_2_batchnorm_gamma,mixed_1_tower_1_conv_2_batchnorm_beta,mixed_1_tower_2_conv_batchnorm_gamma,mixed_1_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_1_tower_1_conv_2_batchnorm,mixed_1_tower_conv_1_batchnorm,mixed_1_tower_2_conv_batchnorm,mixed_1_conv_batchnorm
+| | | |
+o o o o    mixed_1_tower_1_conv_2_relu,mixed_1_tower_conv_1_relu,mixed_1_tower_2_conv_relu,mixed_1_conv_relu
+|/_/_/
+o o    ch_concat_mixed_1_chconcat,mixed_2_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_2_tower_1_conv_conv2d,mixed_2_tower_1_conv_batchnorm_gamma,mixed_2_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_2_tower_1_conv_batchnorm
+|  \
+|    \
+o o o |    mixed_2_tower_1_conv_relu,mixed_2_tower_conv_conv2d_weight,mixed_2_tower_1_conv_1_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_2_tower_1_conv_1_conv2d,mixed_2_tower_conv_conv2d,mixed_2_tower_conv_batchnorm_gamma,mixed_2_tower_conv_batchnorm_beta,mixed_2_tower_1_conv_1_batchnorm_gamma,mixed_2_tower_1_conv_1_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_2_tower_1_conv_1_batchnorm,mixed_2_tower_conv_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_2_tower_1_conv_1_relu,mixed_2_tower_conv_relu,avg_pool_mixed_2_pool,mixed_2_conv_conv2d_weight,mixed_2_tower_conv_1_conv2d_weight,mixed_2_tower_1_conv_2_conv2d_weight,mixed_2_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_2_tower_1_conv_2_conv2d,mixed_2_tower_conv_1_conv2d,mixed_2_tower_2_conv_conv2d,mixed_2_conv_conv2d,mixed_2_conv_batchnorm_gamma,mixed_2_conv_batchnorm_beta,mixed_2_tower_conv_1_batchnorm_gamma,mixed_2_tower_conv_1_batchnorm_beta,mixed_2_tower_1_conv_2_batchnorm_gamma,mixed_2_tower_1_conv_2_batchnorm_beta,mixed_2_tower_2_conv_batchnorm_gamma,mixed_2_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_2_tower_1_conv_2_batchnorm,mixed_2_tower_conv_1_batchnorm,mixed_2_tower_2_conv_batchnorm,mixed_2_conv_batchnorm
+| | | |
+o o o o    mixed_2_tower_1_conv_2_relu,mixed_2_tower_conv_1_relu,mixed_2_tower_2_conv_relu,mixed_2_conv_relu
+|/_/_/
+o o    ch_concat_mixed_2_chconcat,mixed_3_tower_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_3_tower_conv_conv2d,mixed_3_tower_conv_batchnorm_gamma,mixed_3_tower_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_3_tower_conv_batchnorm
+|  \
+o o |    mixed_3_tower_conv_relu,mixed_3_tower_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_3_tower_conv_1_conv2d,mixed_3_tower_conv_1_batchnorm_gamma,mixed_3_tower_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_3_tower_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_3_tower_conv_1_relu,mixed_3_conv_conv2d_weight,mixed_3_tower_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_3_tower_conv_2_conv2d,mixed_3_conv_conv2d,mixed_3_conv_batchnorm_gamma,mixed_3_conv_batchnorm_beta,mixed_3_tower_conv_2_batchnorm_gamma,mixed_3_tower_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_3_tower_conv_2_batchnorm,mixed_3_conv_batchnorm
+| | |
+o o o    mixed_3_tower_conv_2_relu,mixed_3_conv_relu,max_pool_mixed_3_pool
+|/_/
+o o    ch_concat_mixed_3_chconcat,mixed_4_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_4_tower_1_conv_conv2d,mixed_4_tower_1_conv_batchnorm_gamma,mixed_4_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_4_tower_1_conv_batchnorm
+|  \
+o o |    mixed_4_tower_1_conv_relu,mixed_4_tower_1_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_4_tower_1_conv_1_conv2d,mixed_4_tower_1_conv_1_batchnorm_gamma,mixed_4_tower_1_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_4_tower_1_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_4_tower_1_conv_1_relu,mixed_4_tower_conv_conv2d_weight,mixed_4_tower_1_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_4_tower_1_conv_2_conv2d,mixed_4_tower_conv_conv2d,mixed_4_tower_conv_batchnorm_gamma,mixed_4_tower_conv_batchnorm_beta,mixed_4_tower_1_conv_2_batchnorm_gamma,mixed_4_tower_1_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_4_tower_1_conv_2_batchnorm,mixed_4_tower_conv_batchnorm
+| |  \
+| |    \
+o o o o |    mixed_4_tower_1_conv_2_relu,mixed_4_tower_conv_relu,mixed_4_tower_conv_1_conv2d_weight,mixed_4_tower_1_conv_3_conv2d_weight
+| |/ /   \
+| |/       \
+|/|         |
+o o o o o o |    mixed_4_tower_1_conv_3_conv2d,mixed_4_tower_conv_1_conv2d,mixed_4_tower_conv_1_batchnorm_gamma,mixed_4_tower_conv_1_batchnorm_beta,mixed_4_tower_1_conv_3_batchnorm_gamma,mixed_4_tower_1_conv_3_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_4_tower_1_conv_3_batchnorm,mixed_4_tower_conv_1_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_4_tower_1_conv_3_relu,mixed_4_tower_conv_1_relu,avg_pool_mixed_4_pool,mixed_4_conv_conv2d_weight,mixed_4_tower_conv_2_conv2d_weight,mixed_4_tower_1_conv_4_conv2d_weight,mixed_4_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_4_tower_1_conv_4_conv2d,mixed_4_tower_conv_2_conv2d,mixed_4_tower_2_conv_conv2d,mixed_4_conv_conv2d,mixed_4_conv_batchnorm_gamma,mixed_4_conv_batchnorm_beta,mixed_4_tower_conv_2_batchnorm_gamma,mixed_4_tower_conv_2_batchnorm_beta,mixed_4_tower_1_conv_4_batchnorm_gamma,mixed_4_tower_1_conv_4_batchnorm_beta,mixed_4_tower_2_conv_batchnorm_gamma,mixed_4_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_4_tower_1_conv_4_batchnorm,mixed_4_tower_conv_2_batchnorm,mixed_4_tower_2_conv_batchnorm,mixed_4_conv_batchnorm
+| | | |
+o o o o    mixed_4_tower_1_conv_4_relu,mixed_4_tower_conv_2_relu,mixed_4_tower_2_conv_relu,mixed_4_conv_relu
+|/_/_/
+o o    ch_concat_mixed_4_chconcat,mixed_5_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_5_tower_1_conv_conv2d,mixed_5_tower_1_conv_batchnorm_gamma,mixed_5_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_5_tower_1_conv_batchnorm
+|  \
+o o |    mixed_5_tower_1_conv_relu,mixed_5_tower_1_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_5_tower_1_conv_1_conv2d,mixed_5_tower_1_conv_1_batchnorm_gamma,mixed_5_tower_1_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_5_tower_1_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_5_tower_1_conv_1_relu,mixed_5_tower_conv_conv2d_weight,mixed_5_tower_1_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_5_tower_1_conv_2_conv2d,mixed_5_tower_conv_conv2d,mixed_5_tower_conv_batchnorm_gamma,mixed_5_tower_conv_batchnorm_beta,mixed_5_tower_1_conv_2_batchnorm_gamma,mixed_5_tower_1_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_5_tower_1_conv_2_batchnorm,mixed_5_tower_conv_batchnorm
+| |  \
+| |    \
+o o o o |    mixed_5_tower_1_conv_2_relu,mixed_5_tower_conv_relu,mixed_5_tower_conv_1_conv2d_weight,mixed_5_tower_1_conv_3_conv2d_weight
+| |/ /   \
+| |/       \
+|/|         |
+o o o o o o |    mixed_5_tower_1_conv_3_conv2d,mixed_5_tower_conv_1_conv2d,mixed_5_tower_conv_1_batchnorm_gamma,mixed_5_tower_conv_1_batchnorm_beta,mixed_5_tower_1_conv_3_batchnorm_gamma,mixed_5_tower_1_conv_3_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_5_tower_1_conv_3_batchnorm,mixed_5_tower_conv_1_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_5_tower_1_conv_3_relu,mixed_5_tower_conv_1_relu,avg_pool_mixed_5_pool,mixed_5_conv_conv2d_weight,mixed_5_tower_conv_2_conv2d_weight,mixed_5_tower_1_conv_4_conv2d_weight,mixed_5_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_5_tower_1_conv_4_conv2d,mixed_5_tower_conv_2_conv2d,mixed_5_tower_2_conv_conv2d,mixed_5_conv_conv2d,mixed_5_conv_batchnorm_gamma,mixed_5_conv_batchnorm_beta,mixed_5_tower_conv_2_batchnorm_gamma,mixed_5_tower_conv_2_batchnorm_beta,mixed_5_tower_1_conv_4_batchnorm_gamma,mixed_5_tower_1_conv_4_batchnorm_beta,mixed_5_tower_2_conv_batchnorm_gamma,mixed_5_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_5_tower_1_conv_4_batchnorm,mixed_5_tower_conv_2_batchnorm,mixed_5_tower_2_conv_batchnorm,mixed_5_conv_batchnorm
+| | | |
+o o o o    mixed_5_tower_1_conv_4_relu,mixed_5_tower_conv_2_relu,mixed_5_tower_2_conv_relu,mixed_5_conv_relu
+|/_/_/
+o o    ch_concat_mixed_5_chconcat,mixed_6_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_6_tower_1_conv_conv2d,mixed_6_tower_1_conv_batchnorm_gamma,mixed_6_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_6_tower_1_conv_batchnorm
+|  \
+o o |    mixed_6_tower_1_conv_relu,mixed_6_tower_1_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_6_tower_1_conv_1_conv2d,mixed_6_tower_1_conv_1_batchnorm_gamma,mixed_6_tower_1_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_6_tower_1_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_6_tower_1_conv_1_relu,mixed_6_tower_conv_conv2d_weight,mixed_6_tower_1_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_6_tower_1_conv_2_conv2d,mixed_6_tower_conv_conv2d,mixed_6_tower_conv_batchnorm_gamma,mixed_6_tower_conv_batchnorm_beta,mixed_6_tower_1_conv_2_batchnorm_gamma,mixed_6_tower_1_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_6_tower_1_conv_2_batchnorm,mixed_6_tower_conv_batchnorm
+| |  \
+| |    \
+o o o o |    mixed_6_tower_1_conv_2_relu,mixed_6_tower_conv_relu,mixed_6_tower_conv_1_conv2d_weight,mixed_6_tower_1_conv_3_conv2d_weight
+| |/ /   \
+| |/       \
+|/|         |
+o o o o o o |    mixed_6_tower_1_conv_3_conv2d,mixed_6_tower_conv_1_conv2d,mixed_6_tower_conv_1_batchnorm_gamma,mixed_6_tower_conv_1_batchnorm_beta,mixed_6_tower_1_conv_3_batchnorm_gamma,mixed_6_tower_1_conv_3_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_6_tower_1_conv_3_batchnorm,mixed_6_tower_conv_1_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_6_tower_1_conv_3_relu,mixed_6_tower_conv_1_relu,avg_pool_mixed_6_pool,mixed_6_conv_conv2d_weight,mixed_6_tower_conv_2_conv2d_weight,mixed_6_tower_1_conv_4_conv2d_weight,mixed_6_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_6_tower_1_conv_4_conv2d,mixed_6_tower_conv_2_conv2d,mixed_6_tower_2_conv_conv2d,mixed_6_conv_conv2d,mixed_6_conv_batchnorm_gamma,mixed_6_conv_batchnorm_beta,mixed_6_tower_conv_2_batchnorm_gamma,mixed_6_tower_conv_2_batchnorm_beta,mixed_6_tower_1_conv_4_batchnorm_gamma,mixed_6_tower_1_conv_4_batchnorm_beta,mixed_6_tower_2_conv_batchnorm_gamma,mixed_6_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_6_tower_1_conv_4_batchnorm,mixed_6_tower_conv_2_batchnorm,mixed_6_tower_2_conv_batchnorm,mixed_6_conv_batchnorm
+| | | |
+o o o o    mixed_6_tower_1_conv_4_relu,mixed_6_tower_conv_2_relu,mixed_6_tower_2_conv_relu,mixed_6_conv_relu
+|/_/_/
+o o    ch_concat_mixed_6_chconcat,mixed_7_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_7_tower_1_conv_conv2d,mixed_7_tower_1_conv_batchnorm_gamma,mixed_7_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_7_tower_1_conv_batchnorm
+|  \
+o o |    mixed_7_tower_1_conv_relu,mixed_7_tower_1_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_7_tower_1_conv_1_conv2d,mixed_7_tower_1_conv_1_batchnorm_gamma,mixed_7_tower_1_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_7_tower_1_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_7_tower_1_conv_1_relu,mixed_7_tower_conv_conv2d_weight,mixed_7_tower_1_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_7_tower_1_conv_2_conv2d,mixed_7_tower_conv_conv2d,mixed_7_tower_conv_batchnorm_gamma,mixed_7_tower_conv_batchnorm_beta,mixed_7_tower_1_conv_2_batchnorm_gamma,mixed_7_tower_1_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_7_tower_1_conv_2_batchnorm,mixed_7_tower_conv_batchnorm
+| |  \
+| |    \
+o o o o |    mixed_7_tower_1_conv_2_relu,mixed_7_tower_conv_relu,mixed_7_tower_conv_1_conv2d_weight,mixed_7_tower_1_conv_3_conv2d_weight
+| |/ /   \
+| |/       \
+|/|         |
+o o o o o o |    mixed_7_tower_1_conv_3_conv2d,mixed_7_tower_conv_1_conv2d,mixed_7_tower_conv_1_batchnorm_gamma,mixed_7_tower_conv_1_batchnorm_beta,mixed_7_tower_1_conv_3_batchnorm_gamma,mixed_7_tower_1_conv_3_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_7_tower_1_conv_3_batchnorm,mixed_7_tower_conv_1_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+o o o o o o o |    mixed_7_tower_1_conv_3_relu,mixed_7_tower_conv_1_relu,avg_pool_mixed_7_pool,mixed_7_conv_conv2d_weight,mixed_7_tower_conv_2_conv2d_weight,mixed_7_tower_1_conv_4_conv2d_weight,mixed_7_tower_2_conv_conv2d_weight
+| | | |/ / / /
+| | |/|/ / /
+| |/|/|/ /
+| |/|/|/
+|/| | |
+o o o o o o o o o o o o    mixed_7_tower_1_conv_4_conv2d,mixed_7_tower_conv_2_conv2d,mixed_7_tower_2_conv_conv2d,mixed_7_conv_conv2d,mixed_7_conv_batchnorm_gamma,mixed_7_conv_batchnorm_beta,mixed_7_tower_conv_2_batchnorm_gamma,mixed_7_tower_conv_2_batchnorm_beta,mixed_7_tower_1_conv_4_batchnorm_gamma,mixed_7_tower_1_conv_4_batchnorm_beta,mixed_7_tower_2_conv_batchnorm_gamma,mixed_7_tower_2_conv_batchnorm_beta
+| | | |/_/ /_/ /_/ /_/
+| | | |__/ __/ __/
+| | |/|__/ __/
+| |/|/|__/
+| |/|/|
+|/| | |
+o o o o    mixed_7_tower_1_conv_4_batchnorm,mixed_7_tower_conv_2_batchnorm,mixed_7_tower_2_conv_batchnorm,mixed_7_conv_batchnorm
+| | | |
+o o o o    mixed_7_tower_1_conv_4_relu,mixed_7_tower_conv_2_relu,mixed_7_tower_2_conv_relu,mixed_7_conv_relu
+|/_/_/
+o o    ch_concat_mixed_7_chconcat,mixed_8_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_8_tower_1_conv_conv2d,mixed_8_tower_1_conv_batchnorm_gamma,mixed_8_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_8_tower_1_conv_batchnorm
+|  \
+o o |    mixed_8_tower_1_conv_relu,mixed_8_tower_1_conv_1_conv2d_weight
+|/   \
+o o o |    mixed_8_tower_1_conv_1_conv2d,mixed_8_tower_1_conv_1_batchnorm_gamma,mixed_8_tower_1_conv_1_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_8_tower_1_conv_1_batchnorm
+|  \
+|    \
+o o o |    mixed_8_tower_1_conv_1_relu,mixed_8_tower_conv_conv2d_weight,mixed_8_tower_1_conv_2_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_8_tower_1_conv_2_conv2d,mixed_8_tower_conv_conv2d,mixed_8_tower_conv_batchnorm_gamma,mixed_8_tower_conv_batchnorm_beta,mixed_8_tower_1_conv_2_batchnorm_gamma,mixed_8_tower_1_conv_2_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_8_tower_1_conv_2_batchnorm,mixed_8_tower_conv_batchnorm
+| |  \
+| |    \
+o o o o |    mixed_8_tower_1_conv_2_relu,mixed_8_tower_conv_relu,mixed_8_tower_conv_1_conv2d_weight,mixed_8_tower_1_conv_3_conv2d_weight
+| |/ /   \
+| |/       \
+|/|         |
+o o o o o o |    mixed_8_tower_1_conv_3_conv2d,mixed_8_tower_conv_1_conv2d,mixed_8_tower_conv_1_batchnorm_gamma,mixed_8_tower_conv_1_batchnorm_beta,mixed_8_tower_1_conv_3_batchnorm_gamma,mixed_8_tower_1_conv_3_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_8_tower_1_conv_3_batchnorm,mixed_8_tower_conv_1_batchnorm
+| | |
+o o o    mixed_8_tower_1_conv_3_relu,mixed_8_tower_conv_1_relu,max_pool_mixed_8_pool
+|/_/
+o o    ch_concat_mixed_8_chconcat,mixed_9_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_9_tower_1_conv_conv2d,mixed_9_tower_1_conv_batchnorm_gamma,mixed_9_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_9_tower_1_conv_batchnorm
+|  \
+|    \
+o o o |    mixed_9_tower_1_conv_relu,mixed_9_tower_conv_conv2d_weight,mixed_9_tower_1_conv_1_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_9_tower_1_conv_1_conv2d,mixed_9_tower_conv_conv2d,mixed_9_tower_conv_batchnorm_gamma,mixed_9_tower_conv_batchnorm_beta,mixed_9_tower_1_conv_1_batchnorm_gamma,mixed_9_tower_1_conv_1_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_9_tower_1_conv_1_batchnorm,mixed_9_tower_conv_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+| | |          \
+| | |            \
+o o o o o o o o o |    mixed_9_tower_1_conv_1_relu,mixed_9_tower_conv_relu,avg_pool_mixed_9_pool,mixed_9_conv_conv2d_weight,mixed_9_tower_mixed_conv_conv2d_weight,mixed_9_tower_mixed_conv_1_conv2d_weight,mixed_9_tower_1_mixed_conv_conv2d_weight,mixed_9_tower_1_mixed_conv_1_conv2d_weight,mixed_9_tower_2_conv_conv2d_weight
+|\ \ \ x / / / / /
+| | |x x x / / /
+| | | |/|/|/ /
+| | |/|/|/|/
+| |/|/| | |
+|/|/| | | |
+o o o o o o o o o o o o o o o o o o    mixed_9_tower_1_mixed_conv_conv2d,mixed_9_tower_1_mixed_conv_1_conv2d,mixed_9_tower_mixed_conv_conv2d,mixed_9_tower_mixed_conv_1_conv2d,mixed_9_tower_2_conv_conv2d,mixed_9_conv_conv2d,mixed_9_conv_batchnorm_gamma,mixed_9_conv_batchnorm_beta,mixed_9_tower_mixed_conv_batchnorm_gamma,mixed_9_tower_mixed_conv_batchnorm_beta,mixed_9_tower_mixed_conv_1_batchnorm_gamma,mixed_9_tower_mixed_conv_1_batchnorm_beta,mixed_9_tower_1_mixed_conv_batchnorm_gamma,mixed_9_tower_1_mixed_conv_batchnorm_beta,mixed_9_tower_1_mixed_conv_1_batchnorm_gamma,mixed_9_tower_1_mixed_conv_1_batchnorm_beta,mixed_9_tower_2_conv_batchnorm_gamma,mixed_9_tower_2_conv_batchnorm_beta
+| | | | | |/_/ /_/ /_/ /_/ /_/ /_/
+| | | | | |__/ __/ __/ __/ __/
+| | | | |/|__/ __/ __/ __/
+| | | |/|/|__/ __/ __/
+| | |/|/|/|__/ __/
+| | | |/|/|__/
+| | |/|/|/|
+| |/|/| | |
+|/|/| | | |
+o o o o o o    mixed_9_tower_1_mixed_conv_batchnorm,mixed_9_tower_1_mixed_conv_1_batchnorm,mixed_9_tower_mixed_conv_batchnorm,mixed_9_tower_mixed_conv_1_batchnorm,mixed_9_tower_2_conv_batchnorm,mixed_9_conv_batchnorm
+| | | | | |
+o o o o o o    mixed_9_tower_1_mixed_conv_relu,mixed_9_tower_1_mixed_conv_1_relu,mixed_9_tower_mixed_conv_relu,mixed_9_tower_mixed_conv_1_relu,mixed_9_tower_2_conv_relu,mixed_9_conv_relu
+|/_/_/_/_/
+o o    ch_concat_mixed_9_chconcat,mixed_10_tower_1_conv_conv2d_weight
+|x
+|  \
+|    \
+o o o |    mixed_10_tower_1_conv_conv2d,mixed_10_tower_1_conv_batchnorm_gamma,mixed_10_tower_1_conv_batchnorm_beta
+|/_/ /
+|  /
+o |    mixed_10_tower_1_conv_batchnorm
+|  \
+|    \
+o o o |    mixed_10_tower_1_conv_relu,mixed_10_tower_conv_conv2d_weight,mixed_10_tower_1_conv_1_conv2d_weight
+| |/ / \
+|/|/     \
+| |        \
+o o o o o o |    mixed_10_tower_1_conv_1_conv2d,mixed_10_tower_conv_conv2d,mixed_10_tower_conv_batchnorm_gamma,mixed_10_tower_conv_batchnorm_beta,mixed_10_tower_1_conv_1_batchnorm_gamma,mixed_10_tower_1_conv_1_batchnorm_beta
+| |/_/ /_/ /
+| |__/ __/
+|/|  /
+o o |    mixed_10_tower_1_conv_1_batchnorm,mixed_10_tower_conv_batchnorm
+| | |\
+| | |  \
+| | |    \
+| | |      \
+| | |        \
+| | |          \
+| | |            \
+o o o o o o o o o |    mixed_10_tower_1_conv_1_relu,mixed_10_tower_conv_relu,max_pool_mixed_10_pool,mixed_10_conv_conv2d_weight,mixed_10_tower_mixed_conv_conv2d_weight,mixed_10_tower_mixed_conv_1_conv2d_weight,mixed_10_tower_1_mixed_conv_conv2d_weight,mixed_10_tower_1_mixed_conv_1_conv2d_weight,mixed_10_tower_2_conv_conv2d_weight
+|\ \ \ x / / / / /
+| | |x x x / / /
+| | | |/|/|/ /
+| | |/|/|/|/
+| |/|/| | |
+|/|/| | | |
+o o o o o o o o o o o o o o o o o o    mixed_10_tower_1_mixed_conv_conv2d,mixed_10_tower_1_mixed_conv_1_conv2d,mixed_10_tower_mixed_conv_conv2d,mixed_10_tower_mixed_conv_1_conv2d,mixed_10_tower_2_conv_conv2d,mixed_10_conv_conv2d,mixed_10_conv_batchnorm_gamma,mixed_10_conv_batchnorm_beta,mixed_10_tower_mixed_conv_batchnorm_gamma,mixed_10_tower_mixed_conv_batchnorm_beta,mixed_10_tower_mixed_conv_1_batchnorm_gamma,mixed_10_tower_mixed_conv_1_batchnorm_beta,mixed_10_tower_1_mixed_conv_batchnorm_gamma,mixed_10_tower_1_mixed_conv_batchnorm_beta,mixed_10_tower_1_mixed_conv_1_batchnorm_gamma,mixed_10_tower_1_mixed_conv_1_batchnorm_beta,mixed_10_tower_2_conv_batchnorm_gamma,mixed_10_tower_2_conv_batchnorm_beta
+| | | | | |/_/ /_/ /_/ /_/ /_/ /_/
+| | | | | |__/ __/ __/ __/ __/
+| | | | |/|__/ __/ __/ __/
+| | | |/|/|__/ __/ __/
+| | |/|/|/|__/ __/
+| | | |/|/|__/
+| | |/|/|/|
+| |/|/| | |
+|/|/| | | |
+o o o o o o    mixed_10_tower_1_mixed_conv_batchnorm,mixed_10_tower_1_mixed_conv_1_batchnorm,mixed_10_tower_mixed_conv_batchnorm,mixed_10_tower_mixed_conv_1_batchnorm,mixed_10_tower_2_conv_batchnorm,mixed_10_conv_batchnorm
+| | | | | |
+o o o o o o    mixed_10_tower_1_mixed_conv_relu,mixed_10_tower_1_mixed_conv_1_relu,mixed_10_tower_mixed_conv_relu,mixed_10_tower_mixed_conv_1_relu,mixed_10_tower_2_conv_relu,mixed_10_conv_relu
+|/_/_/_/_/
+o    ch_concat_mixed_10_chconcat
+|
+o    global_pool
+|
+o o o    flatten,fc1_weight,fc1_bias
+|/_/
+o o    fc1,softmax_label
+|/
+o    softmax
