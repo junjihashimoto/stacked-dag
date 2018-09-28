@@ -433,6 +433,7 @@ symbolToChar SLMove = '_'
 symbolToChar SRMove = '_'
 symbolToChar SSpace = ' '
 
+
 -- | Rendering symbols to text
 --
 -- >>> renderToText [[(SNode "",0)],[(SHold,0)],[(SNode "",0)]] []
@@ -441,11 +442,33 @@ symbolToChar SSpace = ' '
 -- "o o\n|/\no\n"
 renderToText :: [[(Symbol,Pos)]] -> [String] -> String
 renderToText [] _ = []
-renderToText ([]:sxx) labelbuf = (if 0 == foldr (\i s -> s + length i) 0 labelbuf  then "" else str )++ "\n" ++ renderToText sxx []
+renderToText ([]:sxx) labelbuf = (if 0 == foldr (\i s -> s + length i) 0 labelbuf
+                                  then ""
+                                  else if len >= 4 && llen >= 2
+                                       then str0
+                                       else str
+                                 )++ "\n" ++ renderToText sxx []
   where
     str = "    " ++ (L.intercalate "," labelbuf)
+    str0 = "    " ++ prefix ++ "{" ++ (L.intercalate "," (map (drop len) labelbuf)) ++ "}"
+    prefix = getLongestCommonPrefix labelbuf
+    len = length prefix
+    llen = length labelbuf
+
 renderToText ((s@(SNode label,_):sx):sxx) labelbuf = (symbolToChar (fst s)):(renderToText (sx:sxx) (labelbuf ++ [label]))
 renderToText ((s:sx):sxx) labelbuf = (symbolToChar (fst s)):(renderToText (sx:sxx) labelbuf)
+
+getLongestCommonPrefix' :: String -> String -> String -> String
+getLongestCommonPrefix' (x:xs) (y:ys) buf | x == y = getLongestCommonPrefix' xs ys (buf ++ (x:[]))
+                                          | otherwise = buf
+getLongestCommonPrefix' [] _ buf = buf
+getLongestCommonPrefix' _ [] buf = buf
+
+
+getLongestCommonPrefix :: [String] -> String
+getLongestCommonPrefix (str:strs) = foldl (\a b -> getLongestCommonPrefix' a b []) str strs
+getLongestCommonPrefix [] = []
+
 
 -- | Allocate destinations of nodes.
 --
