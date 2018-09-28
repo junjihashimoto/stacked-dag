@@ -1,0 +1,55 @@
+name:                stacked-dag
+version:             0.1.0.0
+github:              "junjihashimoto/stacked-dag"
+license:             BSD3
+author:              "Junji Hashimoto"
+maintainer:          "junji.hashimoto@gmail.com"
+copyright:           "2018 Junji Hashimoto"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/junji.hashimoto/stacked-dag#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- text
+- graphviz
+
+library:
+  source-dirs: src
+
+executables:
+  stacked-dag:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - stacked-dag
+    - optparse-applicative
+
+
+
+tests:
+  doctest:
+    main: doctests.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - stacked-dag
+    - doctest
