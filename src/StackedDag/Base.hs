@@ -57,6 +57,8 @@ type DepthNode = M.Map NodeId Depth
 
 type DepthGroup = M.Map Depth [NodeId]
 
+type NodeDepth = M.Map NodeId Depth
+
 type DepthGroup' = M.Map Depth ([NodeId],[NodeId])
 
 type DepthGroup'' = M.Map Depth ([(NodeId,Cur,Dest)],[(NodeId,Cur,Dest)])
@@ -118,6 +120,10 @@ getDepthGroup edges = M.fromList d2n
         a:ax -> case a of
           (n,d):_ -> (n,sort' $ S.fromList $ map snd a): loop ax
           [] -> loop ax
+
+getNodeDepth :: DepthGroup -> NodeDepth
+getNodeDepth dg = M.fromList $ concat $ map (\(d,nodes) -> map (\node -> (node,d)) nodes) $ M.toList dg
+
 
 pairs edges = do
   (p, c) <- M.toList edges
@@ -294,6 +300,10 @@ nodeWithSpace labels (nodes,skipnodes) =
 -- fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))]
 -- >>> addBypassNode'' 2 edges (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
+--
+-- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
+-- >>> addBypassNode'' 2 edges (M.fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))])
+-- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
 addBypassNode'' :: Depth -> Edges -> DepthGroup' -> DepthGroup'
 addBypassNode'' d edges dg | d < 2 = error $ "depth " ++ show d  ++ " must be greater than 2"
                            | otherwise =
@@ -302,10 +312,15 @@ addBypassNode'' d edges dg | d < 2 = error $ "depth " ++ show d  ++ " must be gr
     (Just (nids0,skipnids0),Nothing)        -> dg
     (Nothing,_)                             -> dg
   where
+    nd = getNodeDepth $ getDepthGroup edges
+    getDepth :: NodeId -> Depth
+    getDepth nid = maybe 0 id $ M.lookup nid nd
+    edges' :: Edges
+    edges' = M.fromList $ map (\(n,nids) ->  (n, S.fromList (filter (\nid -> getDepth nid < d) (S.toList nids)))) $ M.toList edges
     elem :: NodeId -> [NodeId] -> Bool
     elem nid nids =
-      case M.lookup nid edges of
-        Just m -> all id (map (\n -> L.elem n nids) (S.toList m))
+      case M.lookup nid edges' of
+        Just m -> all id $ map (\n -> L.elem n nids) $ (S.toList m)
         Nothing -> True
     update :: Depth -> [NodeId] -> DepthGroup' -> NodeId -> DepthGroup'
     update d' nids1 dg' nid0 =
@@ -342,6 +357,10 @@ addBypassNode' edges dg = foldr (\d dg' -> addBypassNode'' d edges dg') dg $ [2.
 -- >>> dg = getDepthGroup edges
 -- >>> addBypassNode edges dg
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
+-- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
+-- >>> dg = getDepthGroup edges
+-- >>> addBypassNode edges dg
+-- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
 addBypassNode :: Edges -> DepthGroup -> DepthGroup'
 addBypassNode edges dg = addBypassNode' edges $ M.fromList $ map (\(k,v)-> (k,(v,[]))) $ M.toList dg
 
