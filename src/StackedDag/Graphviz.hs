@@ -19,7 +19,7 @@ genEdgesFromDot dot = (labels,edges)
      (GT.Label name) -> Just (show name)
      _ -> Nothing
    getl :: G.Attributes -> String
-   getl attrs = maybe "" id $ foldl (\s i-> s <>  getl' i) Nothing attrs
+   getl attrs = maybe "" id $ foldl (\s i-> s `mappend`  getl' i) Nothing attrs
    labels = mkLabels $ map (\v -> (read (G.nodeID v),getl (G.nodeAttributes v))) $ G.graphNodes dg
 
 

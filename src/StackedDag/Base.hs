@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module StackedDag.Base where
 
 import qualified Data.Map as M
@@ -16,31 +17,36 @@ type Labels = M.Map NodeId String
 
 data Symbol =
     SNode String -- o with label
-  | SLeft -- /
-  | SRight -- \
-  | SHold -- |
-  | SLMove -- _
-  | SRMove -- _
-  | SCross -- x
+  | SLeft -- '/'
+  | SRight -- '\\'
+  | SHold -- '|'
+  | SLMove -- '_'
+  | SRMove -- '_'
+  | SCross -- 'x'
   | SSpace -- ' '
   deriving (Show, Read, Eq)
 
-instance Semigroup Symbol where
-  (<>) n@(SNode _) _  = n
-  (<>) _ n@(SNode _) = n
-  (<>) a SSpace = a
-  (<>) SSpace a = a
-  (<>) SLeft SRight = SCross
-  (<>) SRight SLeft = SCross
-  (<>) SCross SRight = SCross
-  (<>) SCross SLeft = SCross
-  (<>) SRight SCross = SCross
-  (<>) SLeft SCross = SCross
-  (<>) a _ = a
-
+appendSymbol :: Symbol -> Symbol -> Symbol
+appendSymbol n@(SNode _) _  = n
+appendSymbol _ n@(SNode _) = n
+appendSymbol a SSpace = a
+appendSymbol SSpace a = a
+appendSymbol SLeft SRight = SCross
+appendSymbol SRight SLeft = SCross
+appendSymbol SCross SRight = SCross
+appendSymbol SCross SLeft = SCross
+appendSymbol SRight SCross = SCross
+appendSymbol SLeft SCross = SCross
+appendSymbol a _ = a
 
 instance Monoid Symbol where
   mempty = SSpace
+#if MIN_VERSION_base(4,11,0)
+instance Semigroup Symbol where
+  (<>) = appendSymbol
+#else
+  mappend = appendSymbol
+#endif
 
 type Nodes = S.Set NodeId
 
