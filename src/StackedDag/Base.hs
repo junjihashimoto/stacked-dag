@@ -318,26 +318,28 @@ nodeWithSpace labels (nodes,skipnodes) =
 -- | Add bypass nodes
 --
 -- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> addBypassNode'' 2 edges (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
+-- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
 -- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
--- >>> addBypassNode'' 3 edges (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
+-- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> addBypassNode'' 3 edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))]
--- >>> addBypassNode'' 2 edges (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))])
+-- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
 --
 -- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
--- >>> addBypassNode'' 2 edges (M.fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))])
+-- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))])
 -- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
-addBypassNode'' :: Depth -> Edges -> DepthGroup' -> DepthGroup'
-addBypassNode'' d edges dg | d < 2 = error $ "depth " ++ show d  ++ " must be greater than 2"
-                           | otherwise =
+addBypassNode'' :: Depth -> Edges -> NodeDepth -> DepthGroup' -> DepthGroup'
+addBypassNode'' d edges nd dg | d < 2 = error $ "depth " ++ show d  ++ " must be greater than 2"
+                              | otherwise =
   case (M.lookup d dg,M.lookup (d-1) dg) of
     (Just (nids0,skipnids0),Just n1@(nids1,v)) -> M.update (\_ -> Just (foldl (\n1' nid -> update nids1 n1' nid) n1 (nids0++skipnids0))) (d-1) dg
     (Just (nids0,skipnids0),Nothing)        -> dg
     (Nothing,_)                             -> dg
   where
-    nd = getNodeDepth $ getDepthGroup edges
     getDepth :: NodeId -> Depth
     getDepth nid = maybe 0 id $ M.lookup nid nd
     edges' :: Edges
@@ -364,30 +366,35 @@ maxDepth dg = maximum $ map fst $ M.toList dg
 -- | Add bypass nodes
 --
 -- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> addBypassNode' edges (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
+-- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> addBypassNode' edges nd (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
 -- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
--- >>> addBypassNode' edges (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
+-- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> addBypassNode' edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
-addBypassNode' :: Edges -> DepthGroup' -> DepthGroup'
-addBypassNode' edges dg = foldr (\d dg' -> addBypassNode'' d edges dg') dg $ [2..(maxDepth dg)]
+addBypassNode' :: Edges -> NodeDepth -> DepthGroup' -> DepthGroup'
+addBypassNode' edges nd dg = foldr (\d dg' -> addBypassNode'' d edges nd dg') dg $ [2..(maxDepth dg)]
 
 -- | Add bypass nodes
 --
 -- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
 -- >>> dg = getDepthGroup edges
--- >>> addBypassNode edges dg
+-- >>> nd = getNodeDepth dg
+-- >>> addBypassNode edges nd dg
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
 -- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
 -- >>> dg = getDepthGroup edges
--- >>> addBypassNode edges dg
+-- >>> nd = getNodeDepth dg
+-- >>> addBypassNode edges nd dg
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
 -- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
 -- >>> dg = getDepthGroup edges
--- >>> addBypassNode edges dg
+-- >>> nd = getNodeDepth dg
+-- >>> addBypassNode edges nd dg
 -- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
-addBypassNode :: Edges -> DepthGroup -> DepthGroup'
-addBypassNode edges dg = addBypassNode' edges $ M.fromList $ map (\(k,v)-> (k,(v,[]))) $ M.toList dg
+addBypassNode :: Edges -> NodeDepth -> DepthGroup -> DepthGroup'
+addBypassNode edges nd dg = addBypassNode' edges nd $ M.fromList $ map (\(k,v)-> (k,(v,[]))) $ M.toList dg
 
 -- | Add destinations of nodes
 --
@@ -410,18 +417,22 @@ addPosNode edges dg = M.fromList $ mapAddPos $ reverse $ M.toList dg
 --
 -- >>> edges = mkEdges [(0,[1,2])]
 -- >>> dg = getDepthGroup edges
+-- >>> nd = getNodeDepth dg
 -- >>> dg
 -- fromList [(0,[1,2]),(1,[0])]
--- >>> addNode edges dg
+-- >>> addNode edges nd dg
 -- fromList [(0,([(1,0,0),(2,2,2)],[])),(1,([(0,0,0),(0,0,2)],[]))]
-addNode :: Edges -> DepthGroup -> DepthGroup''
-addNode edges dg = addPosNode edges $ addBypassNode edges dg
+addNode :: Edges -> NodeDepth -> DepthGroup -> DepthGroup''
+addNode edges nd dg = addPosNode edges $ addBypassNode edges nd dg
 
 toSymbol :: Labels -> DepthGroup'' -> [[(Symbol,Pos)]]
 toSymbol labels dg = concat $ map (\(k,(n,s)) -> (nodeWithSpace labels (n,s)):moveAllWithSpace (n++s) ) $ reverse $ M.toList dg
 
 edgesToText :: Labels -> Edges -> String
-edgesToText labels edges = renderToText ( reverse $ drop 1 $ reverse $ toSymbol labels $ addNode edges $ getDepthGroup edges) []
+edgesToText labels edges = renderToText ( reverse $ drop 1 $ reverse $ toSymbol labels $ addNode edges nd dg) []
+  where
+    dg = getDepthGroup edges
+    nd = getNodeDepth dg
 
 symbolToChar :: Symbol -> Char
 symbolToChar (SNode _) = 'o'
