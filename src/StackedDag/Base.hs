@@ -323,19 +323,19 @@ nodeWithSpace labels (nodes,skipnodes) =
 
 -- | Add bypass nodes
 --
--- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[2])]
+-- >>> let nd = getNodeDepth $ getDepthGroup edges
 -- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
--- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
--- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
+-- >>> let nd = getNodeDepth $ getDepthGroup edges
 -- >>> addBypassNode'' 3 edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))]
 -- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[0])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
 --
--- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
--- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
+-- >>> let nd = getNodeDepth $ getDepthGroup edges
 -- >>> addBypassNode'' 2 edges nd (M.fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))])
 -- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
 addBypassNode'' :: Depth -> Edges -> NodeDepth -> DepthGroup' -> DepthGroup'
@@ -371,12 +371,12 @@ maxDepth dg = maximum $ map fst $ M.toList dg
 
 -- | Add bypass nodes
 --
--- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[2])]
+-- >>> let nd = getNodeDepth $ getDepthGroup edges
 -- >>> addBypassNode' edges nd (M.fromList [(0,([2],[])),(1,([1],[])),(2,([0],[]))])
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
--- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
--- >>> nd = getNodeDepth $ getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
+-- >>> let nd = getNodeDepth $ getDepthGroup edges
 -- >>> addBypassNode' edges nd (M.fromList [(0,([3],[])),(1,([2],[])),(2,([1],[])),(3,([0],[]))])
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
 addBypassNode' :: Edges -> NodeDepth -> DepthGroup' -> DepthGroup'
@@ -384,19 +384,19 @@ addBypassNode' edges nd dg = foldr (\d dg' -> addBypassNode'' d edges nd dg') dg
 
 -- | Add bypass nodes
 --
--- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> dg = getDepthGroup edges
--- >>> nd = getNodeDepth dg
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[2])]
+-- >>> let dg = getDepthGroup edges
+-- >>> let nd = getNodeDepth dg
 -- >>> addBypassNode edges nd dg
 -- fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
--- >>> edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
--- >>> dg = getDepthGroup edges
--- >>> nd = getNodeDepth dg
+-- >>> let edges = mkEdges [(0,[1,3]),(1,[2]),(2,[3])]
+-- >>> let dg = getDepthGroup edges
+-- >>> let nd = getNodeDepth dg
 -- >>> addBypassNode edges nd dg
 -- fromList [(0,([3],[])),(1,([2],[0])),(2,([1],[0])),(3,([0],[]))]
--- >>> edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
--- >>> dg = getDepthGroup edges
--- >>> nd = getNodeDepth dg
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[4]),(2,[3]),(3,[4])]
+-- >>> let dg = getDepthGroup edges
+-- >>> let nd = getNodeDepth dg
 -- >>> addBypassNode edges nd dg
 -- fromList [(0,([4],[])),(1,([3,1],[])),(2,([2],[0])),(3,([0],[]))]
 addBypassNode :: Edges -> NodeDepth -> DepthGroup -> DepthGroup'
@@ -404,8 +404,8 @@ addBypassNode edges nd dg = addBypassNode' edges nd $ M.fromList $ map (\(k,v)->
 
 -- | Add destinations of nodes
 --
--- >>> edges = mkEdges [(0,[1,2]),(1,[2])]
--- >>> dg = getDepthGroup edges
+-- >>> let edges = mkEdges [(0,[1,2]),(1,[2])]
+-- >>> let dg = getDepthGroup edges
 -- >>> addPosNode edges $ M.fromList [(0,([2],[])),(1,([1],[0])),(2,([0],[]))]
 -- fromList [(0,([(2,0,0)],[])),(1,([(1,0,0)],[(0,2,0)])),(2,([(0,0,0),(0,0,2)],[]))]
 addPosNode :: Edges -> DepthGroup' -> DepthGroup''
@@ -421,9 +421,9 @@ addPosNode edges dg = M.fromList $ mapAddPos $ reverse $ M.toList dg
 
 -- | Grouping the nodes by the depth
 --
--- >>> edges = mkEdges [(0,[1,2])]
--- >>> dg = getDepthGroup edges
--- >>> nd = getNodeDepth dg
+-- >>> let edges = mkEdges [(0,[1,2])]
+-- >>> let dg = getDepthGroup edges
+-- >>> let nd = getNodeDepth dg
 -- >>> dg
 -- fromList [(0,[1,2]),(1,[0])]
 -- >>> addNode edges nd dg
