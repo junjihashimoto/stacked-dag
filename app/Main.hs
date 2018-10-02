@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module Main where
 
 import StackedDag
@@ -17,7 +18,7 @@ samples = pure Samples
 
 parse :: Parser Command
 parse = subparser $
-        command "dot" (info fromdot (progDesc "convert graphviz-dot-file to ascii-dag")) <>
+        command "dot" (info fromdot (progDesc "convert graphviz-dot-file to ascii-dag")) `mappend`
         command "samples" (info samples (progDesc "show samples"))
 
 runCmd :: Command -> IO ()
