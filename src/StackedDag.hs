@@ -1,7 +1,6 @@
 module StackedDag (
   Labels
 , Edges
-, NodeId
 , mkLabels
 , mkEdges
 , edgesToText

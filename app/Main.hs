@@ -21,16 +21,19 @@ parse = subparser $
         command "dot" (info fromdot (progDesc "convert graphviz-dot-file to ascii-dag")) `mappend`
         command "samples" (info samples (progDesc "show samples"))
 
+
+mkLabels' :: [(Int,String)] -> Labels Int String
+mkLabels' = mkLabels
+
 runCmd :: Command -> IO ()
 runCmd (Dot ifile) = do
   v <- T.readFile ifile
   T.putStr $ genAsciiFromDot v
 
-
 runCmd (Samples) = do
   putStr $ edgesToText samplelabels sampledat
   putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
+  putStr $ edgesToText ( mkLabels' [
                            (0,"l0"),
                            (1,"l1"),
                            (2,"l2"),
@@ -40,7 +43,7 @@ runCmd (Samples) = do
                            (1,[2])
                            ])
   putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
+  putStr $ edgesToText ( mkLabels' [
                            (0,"l0"),
                            (1,"l1"),
                            (2,"l2"),
@@ -49,7 +52,7 @@ runCmd (Samples) = do
                            (0,[1,2,3])
                            ])
   putStrLn "---"
-  putStr $ edgesToText ( mkLabels [
+  putStr $ edgesToText ( mkLabels' [
                            (0,"l0"),
                            (1,"l1"),
                            (2,"l2"),
@@ -62,18 +65,18 @@ runCmd (Samples) = do
                            (3,[4])
                            ])
   putStrLn "---"
-  putStr $ edgesToText ( mkLabels []) ( mkEdges [
+  putStr $ edgesToText ( mkLabels' []) ( mkEdges [
                                           (0,[1,2]),
                                           (1,[2])
                                           ])
   putStrLn "---"
-  putStr $ edgesToText ( mkLabels []) ( mkEdges [
+  putStr $ edgesToText ( mkLabels' []) ( mkEdges [
                                           (0,[1,3]),
                                           (1,[2]),
                                           (2,[3])
                                           ])
 
-sampledat :: Edges
+sampledat :: Edges Int
 sampledat = mkEdges [
   (0,[2]),
   (1,[2]),
@@ -83,7 +86,7 @@ sampledat = mkEdges [
   (3,[5])
   ]
 
-samplelabels :: Labels
+samplelabels :: Labels Int String
 samplelabels = mkLabels [
   (0,"l0"),
   (1,"l1"),
